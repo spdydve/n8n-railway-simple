@@ -2,6 +2,11 @@ FROM n8nio/n8n:latest
 
 USER root
 
-RUN mkdir -p /home/node/.n8n
+COPY docker-entrypoint.sh /usr/local/bin/railway-entrypoint.sh
 
-CMD ["sh", "-c", "chown -R node:node /home/node/.n8n && su node -c 'n8n start'"]
+RUN mkdir -p /home/node/.n8n \
+  && chown -R node:node /home/node/.n8n \
+  && chmod +x /usr/local/bin/railway-entrypoint.sh
+
+ENTRYPOINT ["/bin/sh", "/usr/local/bin/railway-entrypoint.sh"]
+CMD ["start"]
